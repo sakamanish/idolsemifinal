@@ -1,0 +1,464 @@
+/* =========================================================
+   GAMESHOW LED STAGE DISPLAY STYLES - /ledout
+   Pure Broadcast Display, 100% Clear Video, Straight Rectangles
+   ========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+:root {
+  --gold-gradient: linear-gradient(135deg, #FFF6D5 0%, #FFD700 25%, #FFA500 60%, #FF8C00 100%);
+  --gold-glow: 0 0 25px rgba(255, 215, 0, 0.65), 0 0 50px rgba(255, 140, 0, 0.4);
+  --cyan-glow: 0 0 30px rgba(0, 229, 255, 0.65), 0 0 60px rgba(0, 150, 255, 0.4);
+  --green-glow: 0 0 30px rgba(0, 230, 118, 0.9), 0 0 60px rgba(0, 200, 83, 0.5);
+  --red-glow: 0 0 30px rgba(255, 23, 68, 0.9), 0 0 60px rgba(213, 0, 0, 0.5);
+  --font-display: 'Montserrat', sans-serif;
+  --font-digits: 'Teko', sans-serif;
+  --font-title: 'Orbitron', sans-serif;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000000;
+  font-family: var(--font-display);
+  color: #FFFFFF;
+}
+
+/* ---------------- 100% Clear Background Video ---------------- */
+.video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+#bgVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  filter: none; /* 100% clear, completely unmuted colors */
+}
+
+/* ---------------- Audio Unlock Banner ---------------- */
+.audio-prompt {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 215, 0, 0.8);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #FFD700;
+  cursor: pointer;
+  transition: opacity 0.5s ease, transform 0.3s ease;
+  animation: pulsePrompt 2s infinite ease-in-out;
+}
+
+.audio-prompt.hide {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 20px);
+}
+
+@keyframes pulsePrompt {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.05); }
+}
+
+/* ---------------- Main Stage Arena (No VS, Perfectly Balanced) ---------------- */
+.stage-arena {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2vh 7vw;
+}
+
+/* ---------------- Podiums (Jodi 1 & Jodi 2) ---------------- */
+.jodi-podium {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40vw;
+  max-width: 480px;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease;
+}
+
+.podium-glow {
+  position: absolute;
+  top: 10%;
+  width: 120%;
+  height: 90%;
+  background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.12) 0%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: -1;
+  transition: all 0.5s ease;
+}
+
+/* Highlight states during animation */
+.jodi-podium.donor-highlight {
+  transform: scale(0.97);
+}
+.jodi-podium.donor-highlight .photo-rect-frame {
+  border-color: #FF3B30 !important;
+  box-shadow: 0 0 50px rgba(255, 59, 48, 0.85) !important;
+  animation: donorPulse 0.4s infinite alternate;
+}
+
+.jodi-podium.receiver-highlight {
+  transform: scale(1.04);
+}
+.jodi-podium.receiver-highlight .photo-rect-frame {
+  border-color: #00FF88 !important;
+  box-shadow: 0 0 60px rgba(0, 255, 136, 0.95), 0 0 90px rgba(0, 229, 255, 0.6) !important;
+  animation: receiverGlow 0.4s infinite alternate;
+}
+
+@keyframes donorPulse {
+  from { transform: scale(1); filter: brightness(1); }
+  to { transform: scale(0.98); filter: brightness(1.2) drop-shadow(0 0 25px #FF3B30); }
+}
+
+@keyframes receiverGlow {
+  from { transform: scale(1); filter: brightness(1.1); }
+  to { transform: scale(1.02); filter: brightness(1.35) drop-shadow(0 0 35px #00FF88); }
+}
+
+/* ---------------- Straight Rectangle Photo Frame ---------------- */
+.photo-rect-frame {
+  position: relative;
+  width: 25vw;
+  height: 33vw;
+  max-width: 340px;
+  max-height: 440px;
+  min-width: 260px;
+  min-height: 340px;
+  border-radius: 8px; /* Straight clean rectangle */
+  padding: 8px;
+  background: linear-gradient(145deg, rgba(26, 26, 36, 0.85) 0%, rgba(10, 10, 16, 0.95) 100%);
+  border: 4px solid #FFD700;
+  box-shadow: var(--gold-glow), 0 15px 35px rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.rect-inner-border {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* Frame Corner Luxury Brackets */
+.frame-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: #FFF6D5;
+  border-style: solid;
+  pointer-events: none;
+}
+.frame-corner.top-left {
+  top: -2px;
+  left: -2px;
+  border-width: 3px 0 0 3px;
+}
+.frame-corner.top-right {
+  top: -2px;
+  right: -2px;
+  border-width: 3px 3px 0 0;
+}
+.frame-corner.bottom-left {
+  bottom: -2px;
+  left: -2px;
+  border-width: 0 0 3px 3px;
+}
+.frame-corner.bottom-right {
+  bottom: -2px;
+  right: -2px;
+  border-width: 0 3px 3px 0;
+}
+
+.photo-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #0d1117;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.95);
+}
+
+.jodi-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.jodi-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 215, 0, 0.75);
+}
+
+.jodi-placeholder svg {
+  width: 76px;
+  height: 76px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
+}
+
+.jodi-placeholder .jodi-label {
+  font-size: 1.2rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #FFD700;
+}
+
+/* ---------------- Jodi Name Banner ---------------- */
+.name-banner {
+  margin-top: 16px;
+  text-align: center;
+  position: relative;
+  width: 100%;
+}
+
+.name-text {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.2vw, 3.4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.45));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 10px;
+}
+
+.name-underline {
+  width: 65%;
+  height: 4px;
+  margin: 6px auto 0;
+  background: var(--gold-gradient);
+  border-radius: 2px;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+}
+
+/* ---------------- Score Box / Podium ---------------- */
+.score-podium {
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 380px;
+  background: linear-gradient(180deg, rgba(20, 25, 45, 0.88) 0%, rgba(8, 10, 20, 0.95) 100%);
+  border: 3px solid rgba(255, 215, 0, 0.75);
+  border-radius: 16px;
+  padding: 12px 18px 8px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.75), inset 0 0 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.score-box-glow {
+  position: absolute;
+  inset: -2px;
+  border-radius: 16px;
+  background: var(--gold-gradient);
+  z-index: -1;
+  opacity: 0.3;
+  filter: blur(8px);
+}
+
+.score-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 6px;
+}
+
+.score-header {
+  font-family: var(--font-title);
+  font-size: clamp(0.75rem, 1.1vw, 1.05rem);
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #FFD700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* ---------------- Permanent Delta Badge (+5 / -5) ---------------- */
+.score-delta-badge {
+  display: none;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: 1px;
+  padding: 4px 18px;
+  border-radius: 20px;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.score-delta-badge.visible {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1 !important;
+}
+
+.score-delta-badge.plus {
+  background: linear-gradient(135deg, #00E676 0%, #00C853 100%);
+  color: #FFFFFF;
+  border: 2px solid #B9F6CA;
+  box-shadow: var(--green-glow), 0 6px 20px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.score-delta-badge.minus {
+  background: linear-gradient(135deg, #FF1744 0%, #D50000 100%);
+  color: #FFFFFF;
+  border: 2px solid #FF80AB;
+  box-shadow: var(--red-glow), 0 6px 20px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Pop animation that stays permanently */
+.score-delta-badge.pop-and-stay {
+  animation: popAndStay 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popAndStay {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+  85% {
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.score-digits {
+  font-family: var(--font-digits);
+  font-size: clamp(5.5rem, 8.5vw, 9rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: 2px;
+  color: #FFFFFF;
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 0 50px rgba(255, 215, 0, 0.7), 0 5px 15px #000000;
+  transition: transform 0.15s ease;
+}
+
+.score-digits.digit-bump {
+  animation: digitBump 0.25s ease-out;
+}
+
+@keyframes digitBump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.18); color: #FFF; text-shadow: 0 0 40px #FFD700; }
+  100% { transform: scale(1); }
+}
+
+/* ---------------- Canvas for FX (Particles, Beams) ---------------- */
+#fxCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 80;
+}
+
+/* ---------------- Flying 3D Transfer Orb ---------------- */
+.transfer-orb {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 90;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.orb-core {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #FFEA79 30%, #FFB300 70%, #E65100 100%);
+  box-shadow: 0 0 40px #FFD700, 0 0 80px #FF9100, 0 0 120px #FF3D00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #FFF;
+}
+
+.orb-content {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #000;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.orb-tail {
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, transparent 70%);
+  border-radius: 50%;
+}

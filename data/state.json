@@ -1,0 +1,23 @@
+{
+  "jodi1": {
+    "name": "ANSHIKA - RISHI",
+    "photo": "/uploads/photo-1795441575663-601518.png",
+    "score": 480
+  },
+  "jodi2": {
+    "name": "SALMAN - DANISH",
+    "photo": "/uploads/photo-1795441582352-697112.png",
+    "score": 470
+  },
+  "transferConfig": {
+    "donor": "jodi2",
+    "receiver": "jodi1",
+    "amount": 5
+  },
+  "lastTransfer": {
+    "donor": "jodi2",
+    "receiver": "jodi1",
+    "amount": 5
+  },
+  "status": "idle"
+}

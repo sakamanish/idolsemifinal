@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gameshow Operator Control Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@700;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/operator.css">
+</head>
+<body>
+  <!-- Top Navigation / Status Header -->
+  <header class="operator-header">
+    <div class="brand">
+      <div class="live-dot"></div>
+      <span class="brand-title">GAMESHOW MASTER OPERATOR</span>
+    </div>
+
+    <div class="header-actions">
+      <div id="wsStatus" class="status-pill offline">
+        <span class="dot"></span>
+        <span class="status-label">CONNECTING...</span>
+      </div>
+      <a href="/ledout" target="_blank" class="btn btn-secondary">
+        📺 Open /ledout
+      </a>
+      <button id="btnReset" class="btn btn-ghost" title="Reset all scores to default">
+        ↺ Reset
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Split Dashboard -->
+  <main class="dashboard-grid">
+    
+    <!-- LEFT PANEL: JODI 1 -->
+    <section class="jodi-card" id="jodi1Card">
+      <div class="card-header">
+        <div class="tag blue-tag">LEFT SIDE</div>
+        <h2>JODI 1</h2>
+      </div>
+
+      <!-- Photo Picker -->
+      <div class="photo-picker-box" id="dropZone1">
+        <div class="preview-container">
+          <img id="imgPreview1" src="" alt="Jodi 1 Preview" style="display: none;">
+          <div id="emptyPhoto1" class="empty-photo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span>Click or Drop Photo Here</span>
+          </div>
+        </div>
+        <input type="file" id="fileInput1" accept="image/*" class="file-input">
+        <button type="button" class="btn btn-sm btn-outline" onclick="document.getElementById('fileInput1').click()">
+          📷 Pick Photo
+        </button>
+      </div>
+
+      <!-- Name Input -->
+      <div class="form-group">
+        <label for="inputName1">JODI 1 NAME</label>
+        <input type="text" id="inputName1" class="form-control" placeholder="Enter Jodi 1 Name" value="JODI 1">
+      </div>
+
+      <!-- Total Score Input -->
+      <div class="form-group">
+        <label for="inputScore1">CURRENT TOTAL MARKS</label>
+        <div class="score-input-row">
+          <button type="button" class="btn-step" onclick="adjustScore('jodi1', -5)">-5</button>
+          <button type="button" class="btn-step" onclick="adjustScore('jodi1', -1)">-1</button>
+          <input type="number" id="inputScore1" class="form-control score-number" value="50">
+          <button type="button" class="btn-step" onclick="adjustScore('jodi1', 1)">+1</button>
+          <button type="button" class="btn-step" onclick="adjustScore('jodi1', 5)">+5</button>
+        </div>
+      </div>
+
+      <!-- Score Steal Option -->
+      <div class="transfer-box receiver-option" id="receiverOption1" onclick="selectReceiver('jodi1')">
+        <div class="transfer-box-header">
+          <input type="radio" name="transferTarget" id="radioJodi1" value="jodi1" checked>
+          <label for="radioJodi1" class="radio-label">
+            <strong>JODI 1 RECEIVES MARKS</strong>
+            <span class="subtext">Takes points from Jodi 2</span>
+          </label>
+        </div>
+        <div class="transfer-controls">
+          <span class="plus-label">+</span>
+          <input type="number" id="stealAmount1" class="form-control amount-input" value="5" min="1" max="100">
+          <span class="marks-unit">marks</span>
+        </div>
+        <div class="quick-chips">
+          <button type="button" class="chip" onclick="setQuickAmount(1, 'jodi1')">+1</button>
+          <button type="button" class="chip" onclick="setQuickAmount(2, 'jodi1')">+2</button>
+          <button type="button" class="chip active" onclick="setQuickAmount(5, 'jodi1')">+5</button>
+          <button type="button" class="chip" onclick="setQuickAmount(10, 'jodi1')">+10</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CENTER PANEL: MASTER FIRE CONTROL & STATUS -->
+    <section class="center-control-panel">
+      <!-- Live Status Visualizer -->
+      <div class="summary-card">
+        <div class="summary-title">PENDING ACTION PREVIEW</div>
+        
+        <div class="flow-display" id="flowDisplay">
+          <div class="flow-team donor" id="flowDonor">JODI 2</div>
+          <div class="flow-arrow">
+            <span class="arrow-icon">➔</span>
+            <span class="flow-amount" id="flowAmountBadge">5 PTS</span>
+          </div>
+          <div class="flow-team receiver" id="flowReceiver">JODI 1</div>
+        </div>
+
+        <div class="projection-row">
+          <div class="projection-item" id="projJodi1">
+            <span class="proj-label">Jodi 1:</span>
+            <span class="proj-math">50 ➔ <strong>55</strong> <em class="gain">(+5)</em></span>
+          </div>
+          <div class="projection-divider">|</div>
+          <div class="projection-item" id="projJodi2">
+            <span class="proj-label">Jodi 2:</span>
+            <span class="proj-math">50 ➔ <strong>45</strong> <em class="loss">(-5)</em></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- HUGE FIRE BUTTON -->
+      <div class="fire-action-wrapper">
+        <button id="btnFire" class="btn-fire">
+          <div class="fire-halo"></div>
+          <span class="fire-icon">🔥</span>
+          <span class="fire-text">FIRE</span>
+          <span class="fire-sub">TRIGGER LED MARKS SHIFT</span>
+        </button>
+        <div class="shortcut-hint">Shortcuts: Press <strong>SPACE</strong> or <strong>ENTER</strong> to Fire</div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="aux-actions">
+        <button id="btnPushUpdate" class="btn btn-primary btn-block">
+          ⚡ Push Updates to LED
+        </button>
+        <div class="secondary-btn-row">
+          <button id="btnSwap" class="btn btn-outline-alt">
+            ⇄ Swap Jodis
+          </button>
+          <button id="btnEqualize" class="btn btn-outline-alt">
+            = Equalize Scores
+          </button>
+        </div>
+      </div>
+
+      <!-- Feedback / Event Log -->
+      <div class="event-feed" id="eventFeed">
+        <div class="log-entry">System ready. Waiting for operator action.</div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: JODI 2 -->
+    <section class="jodi-card" id="jodi2Card">
+      <div class="card-header">
+        <div class="tag orange-tag">RIGHT SIDE</div>
+        <h2>JODI 2</h2>
+      </div>
+
+      <!-- Photo Picker -->
+      <div class="photo-picker-box" id="dropZone2">
+        <div class="preview-container">
+          <img id="imgPreview2" src="" alt="Jodi 2 Preview" style="display: none;">
+          <div id="emptyPhoto2" class="empty-photo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span>Click or Drop Photo Here</span>
+          </div>
+        </div>
+        <input type="file" id="fileInput2" accept="image/*" class="file-input">
+        <button type="button" class="btn btn-sm btn-outline" onclick="document.getElementById('fileInput2').click()">
+          📷 Pick Photo
+        </button>
+      </div>
+
+      <!-- Name Input -->
+      <div class="form-group">
+        <label for="inputName2">JODI 2 NAME</label>
+        <input type="text" id="inputName2" class="form-control" placeholder="Enter Jodi 2 Name" value="JODI 2">
+      </div>
+
+      <!-- Total Score Input -->
+      <div class="form-group">
+        <label for="inputScore2">CURRENT TOTAL MARKS</label>
+        <div class="score-input-row">
+          <button type="button" class="btn-step" onclick="adjustScore('jodi2', -5)">-5</button>
+          <button type="button" class="btn-step" onclick="adjustScore('jodi2', -1)">-1</button>
+          <input type="number" id="inputScore2" class="form-control score-number" value="50">
+          <button type="button" class="btn-step" onclick="adjustScore('jodi2', 1)">+1</button>
+          <button type="button" class="btn-step" onclick="adjustScore('jodi2', 5)">+5</button>
+        </div>
+      </div>
+
+      <!-- Score Steal Option -->
+      <div class="transfer-box receiver-option" id="receiverOption2" onclick="selectReceiver('jodi2')">
+        <div class="transfer-box-header">
+          <input type="radio" name="transferTarget" id="radioJodi2" value="jodi2">
+          <label for="radioJodi2" class="radio-label">
+            <strong>JODI 2 RECEIVES MARKS</strong>
+            <span class="subtext">Takes points from Jodi 1</span>
+          </label>
+        </div>
+        <div class="transfer-controls">
+          <span class="plus-label">+</span>
+          <input type="number" id="stealAmount2" class="form-control amount-input" value="5" min="1" max="100">
+          <span class="marks-unit">marks</span>
+        </div>
+        <div class="quick-chips">
+          <button type="button" class="chip" onclick="setQuickAmount(1, 'jodi2')">+1</button>
+          <button type="button" class="chip" onclick="setQuickAmount(2, 'jodi2')">+2</button>
+          <button type="button" class="chip" onclick="setQuickAmount(5, 'jodi2')">+5</button>
+          <button type="button" class="chip" onclick="setQuickAmount(10, 'jodi2')">+10</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/operator.js"></script>
+</body>
+</html>

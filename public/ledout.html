@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LED Out - Gameshow Stage</title>
+  <!-- Google Fonts for Gameshow Luxury Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,900;1,900&family=Orbitron:wght@700;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/ledout.css">
+</head>
+<body>
+  <!-- Fullscreen 100% Clear Background Video -->
+  <div class="video-container">
+    <video id="bgVideo" src="/bg.mp4" autoplay loop muted playsinline></video>
+  </div>
+
+  <!-- Interactive Audio Unlock Overlay (Fades out automatically) -->
+  <div id="audioUnlock" class="audio-prompt" onclick="unlockAudio()">
+    <span>🔊 Click anywhere to enable Gameshow Audio FX</span>
+  </div>
+
+  <!-- Stage Arena Layout -->
+  <main class="stage-arena">
+    <!-- JODI 1 (LEFT) -->
+    <div class="jodi-podium left-podium" id="podium1">
+      <div class="podium-glow"></div>
+      
+      <!-- Straight Rectangle Photo Frame -->
+      <div class="photo-rect-frame">
+        <div class="rect-inner-border"></div>
+        <div class="photo-wrapper">
+          <img id="jodi1Photo" src="" alt="Jodi 1" class="jodi-img" style="display: none;">
+          <div id="jodi1Placeholder" class="jodi-placeholder">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span class="jodi-label">JODI 1</span>
+          </div>
+        </div>
+        <div class="frame-corner top-left"></div>
+        <div class="frame-corner top-right"></div>
+        <div class="frame-corner bottom-left"></div>
+        <div class="frame-corner bottom-right"></div>
+      </div>
+
+      <!-- Jodi Name -->
+      <div class="name-banner">
+        <div class="name-text" id="jodi1Name">JODI 1</div>
+        <div class="name-underline"></div>
+      </div>
+
+      <!-- Score Box -->
+      <div class="score-podium" id="scorePodium1">
+        <div class="score-box-glow"></div>
+        <div class="score-header-bar">
+          <span class="score-header">TOTAL MARKS</span>
+          <!-- Permanent Delta Badge (+5 / -5) -->
+          <div class="score-delta-badge" id="deltaBadge1"></div>
+        </div>
+        <div class="score-digits" id="jodi1Score">00</div>
+      </div>
+    </div>
+
+    <!-- JODI 2 (RIGHT) -->
+    <div class="jodi-podium right-podium" id="podium2">
+      <div class="podium-glow"></div>
+      
+      <!-- Straight Rectangle Photo Frame -->
+      <div class="photo-rect-frame">
+        <div class="rect-inner-border"></div>
+        <div class="photo-wrapper">
+          <img id="jodi2Photo" src="" alt="Jodi 2" class="jodi-img" style="display: none;">
+          <div id="jodi2Placeholder" class="jodi-placeholder">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span class="jodi-label">JODI 2</span>
+          </div>
+        </div>
+        <div class="frame-corner top-left"></div>
+        <div class="frame-corner top-right"></div>
+        <div class="frame-corner bottom-left"></div>
+        <div class="frame-corner bottom-right"></div>
+      </div>
+
+      <!-- Jodi Name -->
+      <div class="name-banner">
+        <div class="name-text" id="jodi2Name">JODI 2</div>
+        <div class="name-underline"></div>
+      </div>
+
+      <!-- Score Box -->
+      <div class="score-podium" id="scorePodium2">
+        <div class="score-box-glow"></div>
+        <div class="score-header-bar">
+          <span class="score-header">TOTAL MARKS</span>
+          <!-- Permanent Delta Badge (+5 / -5) -->
+          <div class="score-delta-badge" id="deltaBadge2"></div>
+        </div>
+        <div class="score-digits" id="jodi2Score">00</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- High Performance Canvas for Particle Streams, Energy Beams & Explosions -->
+  <canvas id="fxCanvas"></canvas>
+
+  <!-- Flying 3D Token / Energy Sphere Container -->
+  <div id="transferOrb" class="transfer-orb">
+    <div class="orb-core">
+      <div class="orb-light"></div>
+      <div class="orb-content" id="orbText">5</div>
+    </div>
+    <div class="orb-tail"></div>
+  </div>
+
+  <script src="/ledout.js"></script>
+</body>
+</html>
